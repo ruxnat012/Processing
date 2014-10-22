@@ -1,0 +1,161 @@
+#include <Adafruit_NeoPixel.h>
+
+#define PIN 6
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(12, PIN, NEO_GRB + NEO_KHZ800);
+
+
+int pulseDuration = 50;//This is how long the led stay on
+
+
+int pulseBrightness = 255;//This is how bright the led are
+
+
+// colors I picked from adobe kuler: http://goo.gl/I5x9aP
+uint32_t darkBlue = strip.Color(9, 75, 108);//This is a color you can select the leds to be
+uint32_t lightBlue = strip.Color(65, 195, 255); //This is a color you can select the leds to be
+uint32_t greyBlue = strip.Color(16, 129, 193); //This is a color you can select the leds to be
+uint32_t blueGrey = strip.Color(75, 99, 107);//This is a color you can select the leds to be
+
+
+void setup() {
+  strip.begin();//This starts the leds
+  strip.show(); // this gets it to show threw the arduino
+  }
+
+void loop() {// makes the process loop
+
+  
+for (int j = 0; j <= 12; j++) { //This is a looping function it it telling the lights to turn on 1 by 1 untill it reaches 12
+   pulseRangeOfLeds(0, j, lightBlue, pulseDuration); 
+  }
+}
+
+//Tells us wich LED to light up
+void pulseOneLed(int pixelNumber, uint32_t color, int duration) { //Makes color of LED's a variable
+  for(int i = 0; i < pulseBrightness; i+=10) { //Makes the brightness of the LED's a variable
+ 
+ 
+    strip.setBrightness(i);//refers back to the brightness
+    turnPixelOn(pixelNumber, color);//refers back to the colors
+    delay(duration/2);// refers back to the duration
+  }
+  
+   for(int i = pulseBrightness; i > 0; i-=10) { //Makes the brightness of the LED's a variable
+   
+   
+    strip.setBrightness(i); //This controlls how bright the lights are going to be.
+    turnPixelOn(pixelNumber, color); //This controlls what pixle is going to be turne on and it also sets the color of the pixle.
+    delay(duration/2);//This is stating how long the pixles are going to be turned on for
+  }
+}
+//tells you wich LED will light up
+int setIncrementSize(int firstNeoPixel, int lastNeoPixel, int delayDuration) {
+  int var = lastNeoPixel - firstNeoPixel;
+  switch (var) {
+    case 1:
+      
+      
+      return 10;
+      break;
+    case 2:
+      
+      
+      return 10;
+      break;
+    case 3:
+      
+      
+      return 5;
+      break;
+    case 4:
+ 
+ 
+    return 5;
+    break;
+    case 5:
+    
+    
+    return 5;
+    break;
+    default: 
+      
+      
+      return 1;
+  }
+}
+
+
+
+
+int setDelayDuration(int incrementSize, int delayDuration) {
+  int var = incrementSize;
+  switch (var) {
+    case 10:
+    
+    //Time between blinks
+      return delayDuration; //How long the LED's are on
+      break;
+    case 5:
+   
+   //Time between blinks
+      return delayDuration/2; //How long the LED's are on
+      break;
+    default: 
+  
+  
+      return delayDuration/40; //How long the LED's are on
+  }
+}
+
+
+//How fast the LEDS go
+void pulseRangeOfLeds(int firstPixel, int lastPixel, uint32_t color, int duration) {
+  
+  
+  int increment = setIncrementSize(firstPixel, lastPixel, duration);
+  
+  
+  int adjustedTime = setDelayDuration(increment, duration);
+  
+  
+  
+  for(int i = 0; i < pulseBrightness; i+=increment) {
+    strip.setBrightness(i);
+    int pixel = firstPixel;
+   
+   //Muiltitasking
+    while(pixel < lastPixel) {
+      turnPixelOn(pixel, color);
+      pixel++;
+      }
+    delay(adjustedTime);
+  }
+  //combines the pulse and brightness
+  for(int i = pulseBrightness; i > 0; i-=increment) {
+    strip.setBrightness(i);
+    int pixel = firstPixel;
+    while(pixel < lastPixel) {
+      turnPixelOn(pixel, color);
+      pixel++;
+      }
+    delay(adjustedTime);
+  }
+  
+}
+
+
+
+// Turns on LED
+void turnPixelOn(int pixelNumber, uint32_t pixelColor) {
+  strip.setPixelColor(pixelNumber, pixelColor);
+  strip.show();
+}
+
+
+//turns of LED
+void turnPixelOff(int pixelNumber) {
+  strip.setPixelColor(pixelNumber, 0, 0, 0);
+  strip.show();
+}
+
