@@ -44,9 +44,9 @@ void pulseOneLed(int pixelNumber, uint32_t color, int duration) { //Makes color 
    for(int i = pulseBrightness; i > 0; i-=10) { //Makes the brightness of the LED's a variable
    
    
-    strip.setBrightness(i); //
-    turnPixelOn(pixelNumber, color);
-    delay(duration/2);
+    strip.setBrightness(i); //This controlls how bright the lights are going to be.
+    turnPixelOn(pixelNumber, color); //This controlls what pixle is going to be turne on and it also sets the color of the pixle.
+    delay(duration/2);//This is stating how long the pixles are going to be turned on for
   }
 }
 
